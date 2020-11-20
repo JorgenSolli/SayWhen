@@ -5,9 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Models\Watcher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\WatcherResource;
+use App\Services\StoreService;
 
 class WatcherController extends Controller
 {
+    /**
+     * @todo add store middleware to 404 if store doesnt exist
+     */
+
     /**
      * Display a listing of the resource.
      *
@@ -22,10 +28,11 @@ class WatcherController extends Controller
             ];
         }
 
-        $lists = Watcher::where('email', $request->get('emil'))->get();
-dd($lists);
-        return [
+        $products = Watcher::where('email', $request->get('email'))->get();
 
+        return [
+            'success' => true,
+            'watchers' => WatcherResource::collection($products),
         ];
     }
 
@@ -37,61 +44,34 @@ dd($lists);
      */
     public function store(string $store, Request $request)
     {
-        $stores = config('stores.list');
-        $store = $stores[$store] ?? false;
-
-        if (!$store) {
-            return [
-                'success' => false,
-                'message'=> $store . ' is not a valid store',
-            ];
-        }
-
         $email = $request->get('email');
         $product = $request->get('product');
+        $productNr = $request->get('product_nr');
+
+        $storeService = new StoreService($store);
+        $productData = $storeService->fetchProduct($product, $productNr);
 
         Watcher::create([
             'email' => $email,
             'product_name' => $product,
+            'product_url' => $productData['details']['url'],
+            'product_nr' => $productNr,
+            'stock_status' => $productData['details']['stock'],
+            'found' => (int) $productData['details']['has_stock'],
+            'last_scan' => now(),
+            'store' => $store,
         ]);
+
+        if ($productData['details']['has_stock']) {
+            return [
+                'success' => true,
+                'message'=> "The product was added to the list, but it seems like it's already in stock.",
+            ];
+        }
 
         return [
             'success' => true,
             'message'=> 'The product is now being watched',
         ];
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Watcher  $watcher
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Watcher $watcher)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Watcher  $watcher
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Watcher $watcher)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Watcher  $watcher
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Watcher $watcher)
-    {
-        //
     }
 }

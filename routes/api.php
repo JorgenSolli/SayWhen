@@ -26,6 +26,6 @@ Route::middleware(['api'])->group(function ()
     
     Route::prefix('watchers')->group(function () {
         Route::post('watch/{store}', [WatcherController::class, 'store']);
-        Route::post('list', [WatcherController::class, 'index']);
+        Route::get('list', [WatcherController::class, 'index']);
 	});
 });

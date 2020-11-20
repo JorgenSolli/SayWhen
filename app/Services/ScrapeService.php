@@ -30,7 +30,14 @@ class ScrapeService
         return HtmlDomParser::file_get_html($this->endpoint);
     }
 
-    public function fetchProduct(string $product)
+    /**
+     * Finds the product
+     * 
+     * @param string $product the product name
+     * @param mixed $productNr options product ID
+     * @return bool|simple_html_dom_node
+     */
+    public function fetchProduct(string $product, $productNr)
     {
         $html = $this->getContents();
         if (!Str::contains($html->plaintext, $product)) {
@@ -51,13 +58,24 @@ class ScrapeService
             if (!Str::contains(strtolower($productNameNode->plaintext), strtolower($product))) {
                 continue;
             }
-            
-            $stockStatus = $productNode->find($stockClass)[0] ?? null;
-            if (!$stockStatus) {
-                continue;
+
+            if ($productNr) {
+                $productNumberClass = $this->storeService->store->getProductNumberClass();
+                $productNrNode = $productNode->find($productNumberClass)[0] ?? null;
+
+                if (!$productNrNode) {
+                    continue;
+                }
+
+                if (!Str::contains(strtolower($productNrNode->text()), strtolower($productNr))) {
+                    continue;
+                }
             }
 
-            $this->storeService->setStockStatus($stockStatus);
+            $stockStatus = $productNode->find($stockClass)[0] ?? null;
+            if ($stockStatus) {
+                $this->storeService->setStockStatus($stockStatus);
+            }
 
             return $productNode;
         }

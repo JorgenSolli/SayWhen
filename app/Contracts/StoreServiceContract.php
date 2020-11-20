@@ -11,7 +11,7 @@ interface StoreServiceContract
      *
      * @return void 
      */
-    public function updateProductStatus(): void;
+    public function updateProduct(): void;
 
     /**
      * Updates the stock for the product

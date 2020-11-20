@@ -1,5 +1,9 @@
 <template>
     <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+        <portal to="page-title">
+			Select a store
+		</portal>
+
         <div class="sm:col-span-5">
             <label class="block text-sm font-medium text-gray-700">
               Select store

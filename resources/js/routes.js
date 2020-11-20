@@ -16,7 +16,7 @@ let routes = [
 ]
 
 const router = new VueRouter({
-    linkExactActiveClass: 'bg-gray-900',
+    linkExactActiveClass: 'bg-indigo-800',
     mode: 'history',
     routes
 })

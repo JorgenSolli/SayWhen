@@ -2,6 +2,7 @@ require('./bootstrap');
 
 window.Vue = require('vue')
 
+import PortalVue from 'portal-vue'
 import Storage from './storage.js'
 import VueSweetalert2 from 'vue-sweetalert2'
 import Multiselect from 'vue-multiselect'
@@ -12,6 +13,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 window.StorageService = new Storage()
 
+Vue.use(PortalVue)
 Vue.use(VueSweetalert2)
 Vue.use(Multiselect)
 Vue.use(VueRouter)

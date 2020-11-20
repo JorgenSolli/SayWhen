@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Services\StoreService;
+use App\Notifications\ProductInStock;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Watcher extends Model
 {
+    use Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -15,6 +20,8 @@ class Watcher extends Model
         'store',
         'email',
         'product_name',
+        'product_url',
+        'product_nr',
         'found',
         'last_scan',
         'stock_status',
@@ -28,4 +35,15 @@ class Watcher extends Model
     protected $dates = [
         'last_scan',
     ];
+
+    public function getStore(): array
+    {
+        $store = new StoreService($this->store);
+        return $store->getStoreData();
+    }
+
+    public function notifyInStock(): void
+    {
+        $this->notify(new ProductInStock($this));
+    }
 }

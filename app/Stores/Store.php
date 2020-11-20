@@ -8,6 +8,11 @@ use simplehtmldom_1_5\simple_html_dom_node;
 
 abstract class Store implements StoreContract
 {
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function getBaseUrl(): string
     {
         return $this->baseUrl;
@@ -38,9 +43,24 @@ abstract class Store implements StoreContract
         return $this->productStockClass;
     }
 
+    public function getProductNumberClass(): string
+    {
+        return $this->productNumberClass;
+    }
+
     public function getInStockText(): string
     {
         return $this->inStockText;
+    }
+
+    public function getNotInStockText(): string
+    {
+        return $this->notInStockText;
+    }
+
+    public function getLogo()
+    {
+        return $this->logo;
     }
 
     public function generateQuery(string $product): string
@@ -50,6 +70,8 @@ abstract class Store implements StoreContract
 
     public function productHasStock(simple_html_dom_node $product): bool
     {
-        return Str::startsWith(html_entity_decode($product->plaintext), $this->getInStockText());
+        $stockText = html_entity_decode($product->plaintext);
+
+        return Str::contains($stockText, $this->getInStockText()) && !Str::contains($stockText, $this->getNotInStockText());
     }
 }

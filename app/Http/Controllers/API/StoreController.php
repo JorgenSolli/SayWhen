@@ -32,12 +32,15 @@ class StoreController extends Controller
      */
     public function lookup(string $store, Request $request)
     {
+        $product = $request->get('product');
+        $productNr = $request->get('product_nr');
+
         $storeService = new StoreService($store);
-        $product = $storeService->fetchProduct($request->get('product'));
+        $product = $storeService->fetchProduct($product, $productNr);
 
         return [
             'success' => (bool) $product,
-            'product' => $product,
+            'product' => $product['details'] ?? null,
         ];
     }
 

@@ -41,8 +41,7 @@ class ScanProducts extends Command
     {
         $watchers = Watcher::where('found', 0)->get();
         foreach ($watchers as $watcher) {
-            // dispatch(new CheckProduct($watcher));
-            dispatch_now(new CheckProduct($watcher));
+            dispatch(new CheckProduct($watcher));
         }
     }
 }

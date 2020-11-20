@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Watcher;
+use App\Jobs\CheckProduct;
 use Illuminate\Support\Facades\Route;
 
 /*

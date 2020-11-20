@@ -4,10 +4,10 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Watcher;
-use Illuminate\Support\Str;
 use App\Stores\KomplettStore;
 use App\Services\ScrapeService;
 use App\Contracts\StoreServiceContract;
+use App\Mail\ProductInStock;
 use simplehtmldom_1_5\simple_html_dom_node;
 
 class StoreService implements StoreServiceContract
@@ -47,14 +47,24 @@ class StoreService implements StoreServiceContract
      *
      * @return void 
      */
-    public function updateProductStatus(): void
+    public function updateProduct(): void
     {
-        $inStock = $this->productHasStock($this->watcher->product_name);
-
-        if ($inStock) {
-            $this->watcher->found = 1;
-            $this->watcher->save();
+        $product = $this->fetchProduct($this->watcher->product_name);
+        if (!$product) {
+            return;
         }
+
+        $this->watcher->product_url = $product['details']['url'];
+        $this->watcher->stock_status = $product['details']['stock'];
+        $this->watcher->last_scan = now();
+
+        $inStock = $this->store->productHasStock($product['node']);
+        if ($inStock) {
+            $this->watcher->notifyInStock();
+            $this->watcher->found = 1;
+        }
+
+        $this->watcher->save();
     }
 
     /**
@@ -78,14 +88,15 @@ class StoreService implements StoreServiceContract
     /**
      * Prases the product
      *
-     * @param string $product 
+     * @param string $product
+     * @param string|int $productNr
      * @return bool|array
      */
-    public function fetchProduct(string $product)
+    public function fetchProduct(string $product, $productNr = null)
     {
         $endpoint = $this->store->generateQuery($product);
         $scrapeService = new ScrapeService($endpoint, $this);
-        $productNode = $scrapeService->fetchProduct($product, $this->store);
+        $productNode = $scrapeService->fetchProduct($product, $productNr);
 
         if (!$productNode) {
             return false;
@@ -93,6 +104,18 @@ class StoreService implements StoreServiceContract
 
         $parsedProduct = $this->store->parseProduct($productNode);
 
-        return $parsedProduct;
+        return [
+            'node' => $productNode,
+            'details' => $parsedProduct,
+        ];
+    }
+
+    public function getStoreData(): array
+    {
+        return [
+            'name' => $this->store->getName(),
+            'url' => $this->store->getBaseUrl(),
+            'logo' => $this->store->getLogo(),
+        ];
     }
 }
