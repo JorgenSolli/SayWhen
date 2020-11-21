@@ -7,7 +7,7 @@
         <div v-if="loggedIn">
             <div class="overflow-hidden">
                 <ul class="divide-y divide-gray-200">
-                    <watcher-item v-for="watcher in watchers" :key="watcher.id" :watcher="watcher"/>
+                    <product v-for="product in products" :key="product.id" :product="product" @deleted="deleted"/>
                 </ul>
             </div>
         </div>
@@ -46,17 +46,17 @@
 </template>
 
 <script>
-import WatcherItem from '@/components/lists/Watcher'
+import Product from '@/components/lists/Product'
 
 export default {
     data() {
         return {
             email: null,
-            watchers: [],
+            products: [],
         }
     },
     components: {
-        WatcherItem
+        Product
     },
     mounted() {
         if (this.loggedIn) {
@@ -75,14 +75,17 @@ export default {
         },
         fetch() {
             axios
-                .get('/api/watchers/list', {
+                .get('/api/products/list', {
                     params: {
                         email: StorageService.get('email')
                     }
                 })
                 .then(({ data }) => {
-                    this.watchers = data.watchers
+                    this.products = data.products
                 })
+        },
+        deleted() {
+            
         }
     }
 }

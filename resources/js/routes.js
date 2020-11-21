@@ -16,13 +16,9 @@ let routes = [
 ]
 
 const router = new VueRouter({
-    linkExactActiveClass: 'bg-indigo-800',
+    linkExactActiveClass: 'bg-green-800',
     mode: 'history',
     routes
-})
-
-router.beforeEach((to, from , next) => {
-    next()
 })
 
 export default router

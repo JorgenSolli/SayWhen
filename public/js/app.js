@@ -1978,7 +1978,7 @@ __webpack_require__.r(__webpack_exports__);
       this.fetch();
     },
     fetch: function fetch() {
-      axios.get('watchers/list');
+      axios.get('products/list');
     }
   }
 });

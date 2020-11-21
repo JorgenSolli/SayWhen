@@ -16,19 +16,19 @@ class KomplettStore extends Store
     public $queryPath = '/search?q=';
 
     /** @var string */
-    public $productListClass = '.product-list-item';
+    public $productListIdentifier = '.product-list-item';
 
     /** @var string */
-    public $productNameClass = '.text-content h2';
+    public $productNameIdentifier = '.text-content h2';
 
     /** @var string */
-    public $productSubNameClass = '.text-content p';
+    public $productSubNameIdentifier = '.text-content p';
 
     /** @var string */
-    public $productStockClass = '.stockstatus-stock-details';
+    public $productStockIdentifier = '.stockstatus-stock-details';
 
     /** @var string */
-    public $productNumberClass = '.product-data';
+    public $productNumberIdentifier = '.product-data';
 
     /** @var string */
     public $inStockText = 'på lager';
@@ -41,10 +41,10 @@ class KomplettStore extends Store
 
     public function parseProduct(simple_html_dom_node $productNode): array
     {
-        $title = $productNode->find($this->getProductNameClass())[0]->text();
-        $subTitle = $productNode->find($this->getproductSubNameClass())[0]->text();
+        $title = $productNode->find($this->getProductNameIdentifier())[0]->text();
+        $subTitle = $productNode->find($this->getproductSubNameIdentifier())[0]->text();
         $url = $this->getBaseUrl() . $productNode->firstChild('a')->getAttribute('href');
-        $stockNode = $productNode->find($this->getproductStockClass())[0] ?? null;
+        $stockNode = $productNode->find($this->getproductStockIdentifier())[0] ?? null;
         $stock = $stockNode ? html_entity_decode($stockNode->text()) : null;
         $hasStock = $stockNode ? $this->productHasStock($stockNode) : null;
 

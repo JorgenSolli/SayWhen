@@ -3,7 +3,9 @@
         <button
             @click="check"
             type="button"
-            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            :disabled="!name || loading"
+            :class="{'opacity-100 hover:bg-indigo-700': name && !loading}"
+            class="opacity-70 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
             <svg
                 class="-ml-1 mr-2 h-5 w-5"
@@ -31,6 +33,7 @@ import ProductModal from '@/components/Products/ProductModal'
 export default {
     data() {
         return {
+            loading: false,
             productModal: false,
             product: {}
         }
@@ -44,6 +47,7 @@ export default {
     },
     methods: {
         check() {
+            this.loading = true
             axios
                 .get(`/api/stores/store/${this.$route.params.store}/lookup`, {
                     params: {
@@ -54,6 +58,7 @@ export default {
                 .then(({ data }) => {
                     this.product = data.product
                     this.productModal = true
+                    this.loading = false
                 })
         }
     }

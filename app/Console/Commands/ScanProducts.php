@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\CheckProduct;
-use App\Models\Watcher;
+use App\Models\Product;
 use Illuminate\Console\Command;
 
 class ScanProducts extends Command
@@ -39,9 +39,9 @@ class ScanProducts extends Command
      */
     public function handle()
     {
-        $watchers = Watcher::where('found', 0)->get();
-        foreach ($watchers as $watcher) {
-            dispatch(new CheckProduct($watcher));
+        $products = Product::where('found', 0)->get();
+        foreach ($products as $product) {
+            dispatch(new CheckProduct($product));
         }
     }
 }

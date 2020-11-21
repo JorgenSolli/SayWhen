@@ -8,6 +8,11 @@ use simplehtmldom_1_5\simple_html_dom_node;
 
 abstract class Store implements StoreContract
 {
+    public function getIdentifier(): string
+    {
+        return Str::slug($this->name);
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -23,29 +28,29 @@ abstract class Store implements StoreContract
         return $this->queryPath;
     }
 
-    public function getProductListClass(): string
+    public function getProductListIdentifier(): string
     {
-        return $this->productListClass;
+        return $this->productListIdentifier;
     }
 
-    public function getProductNameClass(): string
+    public function getProductNameIdentifier(): string
     {
-        return $this->productNameClass;
+        return $this->productNameIdentifier;
     }
 
-    public function getproductSubNameClass(): string
+    public function getproductSubNameIdentifier(): string
     {
-        return $this->productSubNameClass;
+        return $this->productSubNameIdentifier;
     }
 
-    public function getProductStockClass(): string
+    public function getProductStockIdentifier(): string
     {
-        return $this->productStockClass;
+        return $this->productStockIdentifier;
     }
 
-    public function getProductNumberClass(): string
+    public function getProductNumberIdentifier(): string
     {
-        return $this->productNumberClass;
+        return $this->productNumberIdentifier;
     }
 
     public function getInStockText(): string

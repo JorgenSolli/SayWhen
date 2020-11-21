@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Watcher;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,17 +12,17 @@ class ProductInStock extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /** @var $watcher */
-    public $watcher;
+    /** @var $product */
+    public $product;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Watcher $watcher)
+    public function __construct(Product $product)
     {
-        $this->watcher = $watcher;
+        $this->product = $product;
     }
 
     /**
@@ -45,11 +45,11 @@ class ProductInStock extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject($this->watcher->product_name . " now in stock!")
+                    ->subject($this->product->product_name . " now in stock!")
                     ->greeting("It's time!")
-                    ->line($this->watcher->product_name . " appears to be in stock over at " . $this->watcher->store. "!")
-                    ->line("The current stock is: " . $this->watcher->stock_status)
-                    ->action('Go get it now', $this->watcher->product_url)
+                    ->line($this->product->product_name . " appears to be in stock over at " . $this->product->store. "!")
+                    ->line("The current stock is: " . $this->product->stock_status)
+                    ->action('Go get it now', $this->product->product_url)
                     ->line('Thank you for using SayWhen');
     }
 

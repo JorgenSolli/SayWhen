@@ -4,7 +4,7 @@
 			Watch a product on <span class="capitalize">{{ $route.params.store }}</span>
 		</portal>
 
-		<form @submit.prevent="watch" class="space-y-8 divide-y divide-gray-200">
+		<form @submit.prevent="addProduct" class="space-y-8 divide-y divide-gray-200">
 			<div class="space-y-8 divide-y divide-gray-200">
 				<div>
 					<div>
@@ -28,7 +28,7 @@
 									id="product_name"
 									type="text"
 									v-model="product"
-									class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300"
+									class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md sm:text-sm border-gray-300"
 								/>
 							</div>
 						</div>
@@ -42,7 +42,7 @@
 									v-model="product_nr"
 									id="product_nr"
 									type="text"
-									class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300"
+									class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md sm:text-sm border-gray-300"
 								>
 							</div>
 
@@ -154,11 +154,14 @@ export default {
     components: {
 		CheckProduct,
 		GenericModal
-    },
+	},
+	mounted() {
+		this.email = StorageService.get('email')
+	},
 	methods: {
-		watch() {
+		addProduct() {
 			axios
-				.post(`/api/watchers/watch/${this.$route.params.store}`, {
+				.put(`/api/products/product/${this.$route.params.store}`, {
 					product: this.product,
 					product_nr: this.product_nr,
 					email: this.email,

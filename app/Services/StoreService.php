@@ -3,17 +3,17 @@
 namespace App\Services;
 
 use Exception;
-use App\Models\Watcher;
+use App\Models\Product;
 use App\Stores\KomplettStore;
 use App\Services\ScrapeService;
 use App\Contracts\StoreServiceContract;
-use App\Mail\ProductInStock;
+use App\Stores\NetOnNetStore;
 use simplehtmldom_1_5\simple_html_dom_node;
 
 class StoreService implements StoreServiceContract
 {
-    /** @var Watcher */
-    private $watcher;
+    /** @var Product */
+    private $product;
 
     /** @var mixed */
     public $store;
@@ -23,10 +23,10 @@ class StoreService implements StoreServiceContract
      *
      * @return void
      */
-    public function __construct($store, Watcher $watcher = null)
+    public function __construct($store, Product $product = null)
     {
         $this->loadStore($store);
-        $this->watcher = $watcher;
+        $this->product = $product;
     }
 
     private function loadStore(string $store)
@@ -34,6 +34,10 @@ class StoreService implements StoreServiceContract
         switch ($store) {
             case 'komplett':
                 $this->store = new KomplettStore;
+                break;
+
+            case 'netonnet':
+                $this->store = new NetOnNetStore;
                 break;
 
             default:
@@ -49,22 +53,22 @@ class StoreService implements StoreServiceContract
      */
     public function updateProduct(): void
     {
-        $product = $this->fetchProduct($this->watcher->product_name);
+        $product = $this->fetchProduct($this->product->product_name);
         if (!$product) {
             return;
         }
 
-        $this->watcher->product_url = $product['details']['url'];
-        $this->watcher->stock_status = $product['details']['stock'];
-        $this->watcher->last_scan = now();
+        $this->product->product_url = $product['details']['url'];
+        $this->product->stock_status = $product['details']['stock'];
+        $this->product->last_scan = now();
 
         $inStock = $this->store->productHasStock($product['node']);
         if ($inStock) {
-            $this->watcher->notifyInStock();
-            $this->watcher->found = 1;
+            $this->product->notifyInStock();
+            $this->product->found = 1;
         }
 
-        $this->watcher->save();
+        $this->product->save();
     }
 
     /**
@@ -75,14 +79,14 @@ class StoreService implements StoreServiceContract
      */
     public function setStockStatus(simple_html_dom_node $stockNode): void
     {
-        if (!$this->watcher) {
+        if (!$this->product) {
             return;
         }
 
         $stock = $stockNode->getAttribute('title');
 
-        $this->watcher->stock_status = $stock;
-        $this->watcher->save();
+        $this->product->stock_status = $stock;
+        $this->product->save();
     }
 
     /**

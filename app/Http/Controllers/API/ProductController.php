@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\Watcher;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\WatcherResource;
 use App\Services\StoreService;
+use Mews\Purifier\Facades\Purifier;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 
-class WatcherController extends Controller
+class ProductController extends Controller
 {
     /**
      * @todo add store middleware to 404 if store doesnt exist
@@ -28,11 +29,11 @@ class WatcherController extends Controller
             ];
         }
 
-        $products = Watcher::where('email', $request->get('email'))->get();
+        $products = Product::where('email', $request->get('email'))->get();
 
         return [
             'success' => true,
-            'watchers' => WatcherResource::collection($products),
+            'products' => ProductResource::collection($products),
         ];
     }
 
@@ -50,19 +51,20 @@ class WatcherController extends Controller
 
         $storeService = new StoreService($store);
         $productData = $storeService->fetchProduct($product, $productNr);
+        $hasStock = isset($productData['details']['has_stock']) ? 1 : 0;
 
-        Watcher::create([
+        Product::create([
             'email' => $email,
-            'product_name' => $product,
-            'product_url' => $productData['details']['url'],
+            'product_name' => Purifier::clean($product),
+            'product_url' => $productData['details']['url'] ?? null,
             'product_nr' => $productNr,
-            'stock_status' => $productData['details']['stock'],
-            'found' => (int) $productData['details']['has_stock'],
+            'stock_status' => $productData['details']['stock'] ?? null,
+            'found' => $hasStock,
             'last_scan' => now(),
             'store' => $store,
         ]);
 
-        if ($productData['details']['has_stock']) {
+        if ($hasStock) {
             return [
                 'success' => true,
                 'message'=> "The product was added to the list, but it seems like it's already in stock.",
@@ -73,5 +75,21 @@ class WatcherController extends Controller
             'success' => true,
             'message'=> 'The product is now being watched',
         ];
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return [
+            'success' => true,
+            'message'=> 'The product has been deleted',
+        ];        
     }
 }

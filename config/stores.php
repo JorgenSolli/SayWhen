@@ -1,6 +1,7 @@
 <?php
 
-use App\Services\KomplettService;
+use App\Stores\KomplettStore;
+use App\Stores\NetOnNetStore;
 
 return [
 
@@ -13,10 +14,8 @@ return [
     |
     */
 
-    'list' => [
-        [
-            'id' => 'komplett',
-            'name' => 'Komplett',
-        ],
-    ],
+    'list' => collect([
+        new KomplettStore,
+        new NetOnNetStore,
+    ]),
 ];

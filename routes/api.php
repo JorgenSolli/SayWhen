@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\StoreController;
-use App\Http\Controllers\API\WatcherController;
+use App\Http\Controllers\API\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,17 +15,17 @@ use App\Http\Controllers\API\WatcherController;
 |
 */
 
-Route::middleware(['api'])->group(function ()
-{
+Route::middleware(['api'])->group(function () {
     Route::prefix('stores')->group(function () {
         Route::get('', [StoreController::class, 'index']);
         Route::prefix('store/{store}')->group(function () {
             Route::get('lookup', [StoreController::class, 'lookup']);
         });
     });
-    
-    Route::prefix('watchers')->group(function () {
-        Route::post('watch/{store}', [WatcherController::class, 'store']);
-        Route::get('list', [WatcherController::class, 'index']);
-	});
+
+    Route::prefix('products')->group(function () {
+        Route::put('product/{store}', [ProductController::class, 'store']);
+        Route::delete('product/{product}', [ProductController::class, 'destroy']);
+        Route::get('list', [ProductController::class, 'index']);
+    });
 });

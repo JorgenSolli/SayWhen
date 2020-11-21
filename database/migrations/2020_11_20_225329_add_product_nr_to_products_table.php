@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddProductUrlToWatchersTable extends Migration
+class AddProductNrToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddProductUrlToWatchersTable extends Migration
      */
     public function up()
     {
-        Schema::table('watchers', function (Blueprint $table) {
-            $table->string('product_url')->after('product_name');
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('product_nr')->after('product_url')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddProductUrlToWatchersTable extends Migration
      */
     public function down()
     {
-        Schema::table('watchers', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table) {
             //
         });
     }

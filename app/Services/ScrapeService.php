@@ -44,9 +44,9 @@ class ScrapeService
             return;
         }
 
-        $listClass = $this->storeService->store->getProductListClass();
-        $nameClass = $this->storeService->store->getProductNameClass();
-        $stockClass = $this->storeService->store->getProductStockClass();
+        $listClass = $this->storeService->store->getProductListIdentifier();
+        $nameClass = $this->storeService->store->getProductNameIdentifier();
+        $stockClass = $this->storeService->store->getProductStockIdentifier();
 
         $products = $html->find($listClass);
         foreach ($products as $productNode) {
@@ -60,7 +60,7 @@ class ScrapeService
             }
 
             if ($productNr) {
-                $productNumberClass = $this->storeService->store->getProductNumberClass();
+                $productNumberClass = $this->storeService->store->getProductNumberIdentifier();
                 $productNrNode = $productNode->find($productNumberClass)[0] ?? null;
 
                 if (!$productNrNode) {

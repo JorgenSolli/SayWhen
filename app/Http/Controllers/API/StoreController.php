@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use ReflectionClass;
-use App\Models\Watcher;
+use App\Stores\Store;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\StoreService;
 use App\Http\Controllers\Controller;
@@ -17,7 +17,17 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = config('stores.list');
+        $stores = config('stores.list')->map(function($s) {
+            /** @var Store */
+            $store = $s;
+
+            return [
+                'id' => $store->getIdentifier(),
+                'name' => $store->getName(),
+                'url' => $store->getBaseUrl(),
+                'logo' => $store->getLogo(),
+            ];
+        });
 
         return [
             'stores' => $stores,
@@ -47,10 +57,10 @@ class StoreController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Watcher  $watcher
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Watcher $watcher)
+    public function show(Product $product)
     {
         //
     }
@@ -59,10 +69,10 @@ class StoreController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Watcher  $watcher
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Watcher $watcher)
+    public function update(Request $request, Product $product)
     {
         //
     }
@@ -70,10 +80,10 @@ class StoreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Watcher  $watcher
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Watcher $watcher)
+    public function destroy(Product $product)
     {
         //
     }

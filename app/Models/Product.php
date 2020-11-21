@@ -7,7 +7,7 @@ use App\Notifications\ProductInStock;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Watcher extends Model
+class Product extends Model
 {
     use Notifiable;
 

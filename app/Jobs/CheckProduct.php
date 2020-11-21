@@ -2,10 +2,8 @@
 
 namespace App\Jobs;
 
-use ReflectionClass;
-use App\Models\Watcher;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
-use App\Services\KomplettService;
 use App\Services\StoreService;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -16,17 +14,17 @@ class CheckProduct implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var Watcher */
-    private $watcher;
+    /** @var Product */
+    private $product;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Watcher $watcher)
+    public function __construct(Product $product)
     {
-        $this->watcher = $watcher;
+        $this->product = $product;
     }
 
     /**
@@ -36,7 +34,7 @@ class CheckProduct implements ShouldQueue
      */
     public function handle()
     {
-        $storeService = new StoreService($this->watcher->store, $this->watcher);
+        $storeService = new StoreService($this->product->store, $this->product);
         $storeService->updateProduct();
     }
 }
