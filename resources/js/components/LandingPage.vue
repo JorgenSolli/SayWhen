@@ -54,7 +54,7 @@
                                 Nearly instant notification
                             </dt>
                             <dd class="mt-2 text-base text-gray-500">
-                                SayWhen will check the stock status for your watchlist products every two minutes and email you the second the state changes.
+                                SayWhen will check the stock status for your watchlist products every ten minutes and email you the second the state changes.
                             </dd>
                         </div>
                     </div>

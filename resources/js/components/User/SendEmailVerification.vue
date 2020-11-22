@@ -49,7 +49,7 @@
             </div>
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-yellow-800">
-                    {{ email }} not verified
+                    {{ email }} is not verified yet
                 </h3>
                 <div class="mt-2 text-sm text-yellow-700">
                     <p>

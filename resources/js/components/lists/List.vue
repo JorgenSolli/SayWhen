@@ -7,10 +7,44 @@
         <div v-if="$store.state.email">
             <send-email-verification v-if="!email_verified"/>
 
-            <div class="overflow-hidden">
+            <div v-if="products.length" class="overflow-hidden">
                 <ul class="divide-y divide-gray-200">
                     <product v-for="product in products" :key="product.id" :product="product" @fetch="fetch"/>
                 </ul>
+            </div>
+            <div v-else class="rounded-md bg-blue-50 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-blue-800">
+                            Not much to see here...
+                        </h3>
+                        <p class="text-sm text-blue-700">
+                            You currently have no products on your watchlist.
+                        </p>
+
+                        <router-link
+                            to="/store"
+                            class="mt-2 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            <svg
+                                class="-ml-0.5 mr-2 h-4 w-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                            Go to store
+                        </router-link>
+                    </div>
+                </div>
             </div>
         </div>
         <div v-else>
