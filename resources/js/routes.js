@@ -11,11 +11,11 @@ let routes = [
     },
     {
         path: '/store',
-        component: require('@/components/stores/Stores.vue').default,
+        component: require('@/components/Stores/Stores.vue').default,
     },
     {
         path: '/store/:store',
-        component: require('@/components/stores/Store.vue').default,
+        component: require('@/components/Stores/Store.vue').default,
     },
     {
         path: '/my-list',
