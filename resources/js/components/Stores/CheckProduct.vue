@@ -23,19 +23,24 @@
             </svg>
             <span>Check Product</span>
         </button>
-        <product-modal :product="product" :is-open="productModal" @closed="productModal = false"/>
+        <products-modal
+            :products="products"
+            :is-open="productsModal"
+            @closed="productsModal = false"
+            @product-selected="productSelected"
+        />
     </div>
 </template>
 
 <script>
-import ProductModal from '@/components/Products/ProductModal'
+import ProductsModal from '@/components/Products/ProductsModal'
 
 export default {
     data() {
         return {
             loading: false,
-            productModal: false,
-            product: {}
+            productsModal: false,
+            products: []
         }
     },
     props: {
@@ -43,7 +48,7 @@ export default {
         number: String
     },
     components: {
-        ProductModal
+        ProductsModal
     },
     methods: {
         check() {
@@ -56,11 +61,15 @@ export default {
                     }
                 })
                 .then(({ data }) => {
-                    this.product = data.product
-                    this.productModal = true
+                    this.products = data.products
+                    this.productsModal = true
                     this.loading = false
                 })
-        }
+        },
+        productSelected(product_nr) {
+            this.productsModal = false
+			this.$emit('product-selected', product_nr)
+		}
     }
 }
 </script>

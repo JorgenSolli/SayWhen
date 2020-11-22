@@ -98,6 +98,31 @@ class StoreService implements StoreServiceContract
     }
 
     /**
+     * Queries the store and returns the products
+     *
+     * @param string $product
+     * @param string|int|null $productNr
+     * @return bool|array
+     */
+    public function fetchProducts(string $product, $productNr = null)
+    {
+        $endpoint = $this->store->generateQuery($product);
+        $scrapeService = new ScrapeService($endpoint, $this);
+        $productNodes = $scrapeService->fetchProducts($product, $productNr);
+
+        if (!count($productNodes)) {
+            return false;
+        }
+
+        $products = [];
+        foreach ($productNodes as $productNode) {
+            $products[] = $this->store->parseProduct($productNode);
+        }
+
+        return $products;
+    }
+
+    /**
      * Prases the product
      *
      * @param string $product

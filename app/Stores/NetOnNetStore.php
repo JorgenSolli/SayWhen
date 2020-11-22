@@ -53,10 +53,12 @@ class NetOnNetStore extends Store
         $stockNode = $productNode->find($this->getproductStockIdentifier())[0] ?? null;
         $stock = $stockNode ? $this->getStockText($stockNode) : null;
         $hasStock = $stockNode ? $this->productHasStock($stockNode) : null;
+        $productNumber = $productNode->find($this->productNumberIdentifier)[0]->getAttribute('value') ?? null;
 
         $product = [
             'title' => html_entity_decode($title),
             'sub_title' => html_entity_decode($subTitle),
+            'product_number' => trim(html_entity_decode($productNumber)),
             'stock' => $stock,
             'has_stock' => $hasStock,
             'url' => html_entity_decode($url),

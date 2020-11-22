@@ -31,6 +31,60 @@ class ScrapeService
     }
 
     /**
+     * Finds products that matches the query and/or product number
+     * 
+     * @param string $product the product name
+     * @param mixed $productNr options product ID
+     * @return array[simple_html_dom_node]
+     */
+    public function fetchProducts(string $product, $productNr): array
+    {
+        $html = $this->getContents();
+
+        $foundProducts = [];
+
+        $listClass = $this->storeService->store->getProductListIdentifier();
+        $nameClass = $this->storeService->store->getProductNameIdentifier();
+        $stockClass = $this->storeService->store->getProductStockIdentifier();
+
+        $products = $html->find($listClass);
+        foreach ($products as $productNode) {
+            $productNameNode = $productNode->find($nameClass)[0] ?? null;
+            if (!$productNameNode) {
+                continue;
+            }
+
+            if (!Str::contains(strtolower($productNameNode->plaintext), strtolower($product))) {
+                continue;
+            }
+
+            if ($productNr) {
+                $productNumberClass = $this->storeService->store->getProductNumberIdentifier();
+                $productNrNode = $productNode->find($productNumberClass)[0] ?? null;
+
+                if (!$productNrNode) {
+                    continue;
+                }
+
+                $matches = $this->storeService->store->matchesProductNumber($productNrNode, $productNr);
+                if (!$matches) {
+                    continue;
+                }
+            }
+
+            $stockStatus = $productNode->find($stockClass)[0] ?? null;
+            if ($stockStatus) {
+                $this->storeService->setStockStatus($stockStatus);
+            }
+
+            $foundProducts[] = $productNode;
+
+        }
+
+        return $foundProducts;
+    }
+
+    /**
      * Finds the product
      * 
      * @param string $product the product name

@@ -46,11 +46,11 @@ class StoreController extends Controller
         $productNr = $request->get('product_nr');
 
         $storeService = new StoreService($store);
-        $product = $storeService->fetchProduct($product, $productNr);
+        $products = $storeService->fetchProducts($product, $productNr);
 
         return [
-            'success' => (bool) $product,
-            'product' => $product['details'] ?? null,
+            'success' => (bool) $products,
+            'products' => $products,
         ];
     }
 }

@@ -28,28 +28,34 @@
 					aria-modal="true"
 					aria-labelledby="modal-headline"
 				>
-					<div v-if="product">
+					<div v-if="products.length">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">
-                            We found the following product
+                            We found the following products
                         </h3>
-                        <div class="mt-2">
-                            <div class="flex items-center space-x-3">
-                                <h3 class="text-gray-900 text-sm font-medium truncate" v-html="product.title"/>
-                            </div>
-                            <p class="mt-1 text-gray-500 text-sm truncate" v-text="product.sub_title"/>
-                            <p
-								v-if="product.stock"
-                                :class="product.has_stock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
-                                class="flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full"
-                                v-text="product.stock"
-                            />
-							<p
-								v-else
-                                class="bg-red-100 text-red-800 flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full"
-                            >
-								Looks like it's out of stock
-							</p>
-                        </div>
+						<div class="rounded-md bg-blue-50 p-4 mt-4">
+							<div class="flex">
+								<div class="flex-shrink-0">
+									<svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+										<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+									</svg>
+								</div>
+
+								<div class="ml-3 flex-1 md:flex md:justify-between">
+									<p class="text-sm text-blue-700">
+										Click on the product you'd like to watch, and the product number will be specified.
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="divide-y divide-gray-200">
+							<product
+								v-for="product in products"
+								:key="product.product_number"
+								:product="product"
+								@product-selected="productSelected"
+							/>
+						</div>
 					</div>
                     <div v-else>
                         <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
@@ -80,26 +86,14 @@
 						</div>
 					</div>
 
-                    <div :class="{'sm:grid-cols-2': product}" class="mt-5 sm:mt-6 sm:grid sm:gap-3 sm:grid-flow-row-dense">
+                    <div class="mt-5 sm:mt-6 sm:grid sm:gap-3 sm:grid-flow-row-dense">
                         <button
                             @click="close"
                             type="button"
-                            :class="{'w-6/12': product}"
 							class="w-full inline-flex justify-center rounded-md border shadow-sm px-4 py-2 text-base font-medium text-white focus:ring-2 focus:ring-offset-2 sm:text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Close
                         </button>
-
-                        <a
-                            v-if="product"
-                            :href="product.url"
-                            target="_blank"
-							border-gray-300
-							bg-white
-							class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                        >
-                            View Product
-                        </a>
                     </div>
 				</div>
 			</div>
@@ -108,14 +102,19 @@
 </template>
 
 <script>
+import Product from '@/components/Products/Product'
+
 export default {
 	data() {
 		return {
 			open: false,
 		};
 	},
+	components: {
+		Product
+	},
 	props: {
-		product: {
+		products: {
 			required: true,
 		},
 		isOpen: Boolean,
@@ -129,6 +128,9 @@ export default {
 		close() {
 			this.$emit("closed");
 		},
+		productSelected(product_nr) {
+			this.$emit('product-selected', product_nr)
+		}
 	},
 };
 </script>

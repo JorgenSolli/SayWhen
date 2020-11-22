@@ -64,7 +64,11 @@
 						</div>
 
 						<div class="sm:col-span-4">
-							<check-product :name="product" :number="product_nr"/>
+							<check-product
+								:name="product"
+								:number="product_nr"
+								@product-selected="productSelected"
+							/>
 						</div>
 					</div>
 				</div>
@@ -184,6 +188,9 @@ export default {
 		resetForm() {
 			this.product = null
 			this.product_nr = null
+		},
+		productSelected(product_nr) {
+			this.product_nr = product_nr
 		}
 	},
 };
