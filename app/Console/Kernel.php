@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('products:scan')->everyTwoMinutes();
+        $schedule->command('products:scan')->everyMinute();
     }
 
     /**
