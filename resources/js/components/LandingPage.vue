@@ -8,7 +8,7 @@
                 </h1>
 
                 <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                    Ever waited patiently for a product to release or come back in stock, only to find out you were too late, and it's already sold out?
+                    Ever waited patiently for a product to release or come back in stock, only to find out you were too late and it's already sold out?
                     Then SayWhen is exactly what you need!
                 </p>
 
