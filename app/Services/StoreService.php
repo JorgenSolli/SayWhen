@@ -58,7 +58,7 @@ class StoreService implements StoreServiceContract
      */
     public function updateProduct(): void
     {
-        $product = $this->fetchProduct($this->product->product_name);
+        $product = $this->fetchProduct($this->product->product_name, $this->product->product_nr);
         if (!$product) {
             $this->product->last_scan = now();
             $this->product->save();
