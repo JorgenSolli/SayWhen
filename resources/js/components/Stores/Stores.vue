@@ -22,7 +22,6 @@ export default {
         }
     },
     components: {
-        Multiselect,
         StoreListItem
     },
     mounted() {
