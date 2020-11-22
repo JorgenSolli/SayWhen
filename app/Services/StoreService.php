@@ -29,6 +29,11 @@ class StoreService implements StoreServiceContract
         $this->product = $product;
     }
 
+    /**
+     * Loads the store service
+     * 
+     * @param string $store
+     */
     private function loadStore(string $store)
     {
         switch ($store) {
@@ -55,6 +60,9 @@ class StoreService implements StoreServiceContract
     {
         $product = $this->fetchProduct($this->product->product_name);
         if (!$product) {
+            $this->product->last_scan = now();
+            $this->product->save();
+
             return;
         }
 
@@ -114,6 +122,31 @@ class StoreService implements StoreServiceContract
         ];
     }
 
+    /**
+     * Checks if the entry already exists
+     *
+     * @param string $email
+     * @param string $product
+     * @param string $productNr = null
+     * @return bool
+     */
+    public function isAlreadyWatching(string $email, string $product, string $productNr = null): bool
+    {
+        return Product::where('store', $this->store->getIdentifier())->where(function($query) use ($email, $product, $productNr) {
+            $query->where('email', $email);
+            $query->where('product_name', $product);
+
+            if ($productNr) {
+                $query->where('product_nr', $productNr);
+            }
+        })->count();
+    }
+
+    /**
+     * Gets the details for the store
+     * 
+     * @return array
+     */
     public function getStoreData(): array
     {
         return [

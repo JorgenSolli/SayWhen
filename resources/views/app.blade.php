@@ -11,7 +11,7 @@
     </head>
     <body>
         <div id="app" class="app-content">
-            <dju-hav-it></dju-hav-it>
+            <say-when></say-when>
         </div>
 
         <script src="{{ mix('/js/app.js') }}"></script>

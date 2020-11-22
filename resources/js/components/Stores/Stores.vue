@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
 import StoreListItem from '@/components/Stores/StoreListItem'
 
 export default {

@@ -54,7 +54,7 @@ class ScrapeService
             if (!$productNameNode) {
                 continue;
             }
-            
+
             if (!Str::contains(strtolower($productNameNode->plaintext), strtolower($product))) {
                 continue;
             }
@@ -67,7 +67,8 @@ class ScrapeService
                     continue;
                 }
 
-                if (!Str::contains(strtolower($productNrNode->text()), strtolower($productNr))) {
+                $matches = $this->storeService->store->matchesProductNumber($productNrNode, $productNr);
+                if (!$matches) {
                     continue;
                 }
             }

@@ -49,7 +49,7 @@ class NetOnNetStore extends Store
     {
         $title = $productNode->find($this->getProductNameIdentifier())[0]->text();
         $subTitle = $productNode->find($this->getproductSubNameIdentifier())[0]->text();
-        $url = $this->getBaseUrl() . $productNode->firstChild('a')->getAttribute('href');
+        $url = $this->getBaseUrl() . $productNode->find('.shortText a')[0]->getAttribute('href');
         $stockNode = $productNode->find($this->getproductStockIdentifier())[0] ?? null;
         $stock = $stockNode ? $this->getStockText($stockNode) : null;
         $hasStock = $stockNode ? $this->productHasStock($stockNode) : null;
@@ -89,5 +89,10 @@ class NetOnNetStore extends Store
         $inStock = $productNode->find($this->getInStockText())[0] ?? false;
 
         return $inStock ? 'In stock' : 'Not in stock';
+    }
+
+    public function matchesProductNumber(simple_html_dom_node $productNrNode, $productNumner): bool
+    {
+        return $productNrNode->getAttribute('value') == $productNumner;
     }
 }

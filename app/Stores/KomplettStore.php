@@ -2,6 +2,7 @@
 
 namespace App\Stores;
 
+use Illuminate\Support\Str;
 use simplehtmldom_1_5\simple_html_dom_node;
 
 class KomplettStore extends Store
@@ -57,5 +58,10 @@ class KomplettStore extends Store
         ];
 
         return $product;
+    }
+
+    public function matchesProductNumber(simple_html_dom_node $productNrNode, $productNumner): bool
+    {
+        return Str::contains(strtolower($productNrNode->text()), strtolower($productNumner));
     }
 }

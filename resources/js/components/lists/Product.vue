@@ -4,15 +4,24 @@
             <div class="block md:flex items-center px-4 py-4 sm:px-6">
                 <div class="block md:flex-1 md:flex min-w-0 items-center">
                     <div class="flex-shrink-0">
-                        <img
-                            class="w-32 md:w-24 mb-2 md:mb-0"
-                            :src="product.store.logo"
-                            :alt="product.store.name"
-                        />
+                        <a :href="product.store.url" target="_blank">
+                            <img
+                                class="w-32 md:w-24 mb-2 md:mb-0"
+                                :src="product.store.logo"
+                                :alt="product.store.name"
+                            />
+                        </a>
                     </div>
                     <div class="min-w-0 flex-1 px-0 md:px-4 md:grid md:grid-cols-2 md:gap-4">
                         <div>
-                            <p class="text-md md:text-sm font-medium text-indigo-600 truncate capitalize" v-html="product.product_name"/>
+                            <a
+                                :href="product.product_url"
+                                :class="{'hover:underline': product.product_url}"
+                                target="_blank"
+                                class="text-md md:text-sm font-medium text-indigo-600 truncate capitalize"
+                                v-text="product.product_name"
+                            />
+
                             <p class="mt-2 flex items-center text-sm text-gray-500">
                                 <span class="truncate">
                                     Product added {{ product.created_at }}
@@ -65,7 +74,13 @@
                     </a>
 
                     <div class="inline-block md:block">
-                        <refresh-product :product="product" @fetch="$emit('fetch')"/>
+                        <refresh-product
+                            :last_scan.sync="product.last_scan"
+                            :stock_status.sync="product.stock_status"
+                            :found.sync="product.found"
+                            :product_url.sync="product.product_url"
+                            :product="product"
+                        />
                         <delete-product :product="product" @fetch="$emit('fetch')"/>
                     </div>
                 </div>

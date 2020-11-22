@@ -170,6 +170,8 @@ export default {
                     if (data.success) {
 						this.title = 'Cool!'
 						StorageService.set('email', this.email)
+						this.$store.commit('set', this.email)
+						this.resetForm()
                     } else {
 						this.title = 'Uh oh!'
 					}
@@ -179,6 +181,10 @@ export default {
 					this.message = data.message
                 });
 		},
+		resetForm() {
+			this.product = null
+			this.product_nr = null
+		}
 	},
 };
 </script>

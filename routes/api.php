@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\StoreController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\VerifiedEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,12 @@ Route::middleware(['api'])->group(function () {
     Route::prefix('products')->group(function () {
         Route::put('product/{store}', [ProductController::class, 'store']);
         Route::delete('product/{product}', [ProductController::class, 'destroy']);
+        Route::get('product/{product}', [ProductController::class, 'read']);
         Route::get('list', [ProductController::class, 'index']);
+    });
+
+    Route::prefix('email')->group(function () {
+        Route::put('verify', [VerifiedEmailController::class, 'sendVerification']);
+        Route::post('verify', [VerifiedEmailController::class, 'checkVerification']);
     });
 });

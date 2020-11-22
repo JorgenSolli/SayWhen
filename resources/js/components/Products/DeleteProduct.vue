@@ -44,7 +44,7 @@
                                 </h3>
                                 <div class="mt-2">
                                     <p class="text-sm text-gray-500">
-                                        Are you sure you want to remove {{ product.product_name }} from your watchlist?
+                                        Are you sure you want to remove <span class="inline-block" v-html="product.product_name"/> from your watchlist?
                                     </p>
                                 </div>
                             </div>
@@ -92,12 +92,10 @@ export default {
     methods: {
         deleteProduct() {
             axios
-				.delete(`/api/products/${this.$route.params.store}`, {
-					product: this.product,
-				})
+				.delete(`/api/products/product/${this.product.id}`)
 				.then(({ data }) => {
                     this.$emit('fetch')
-                });
+                })
         }
     }
 }
