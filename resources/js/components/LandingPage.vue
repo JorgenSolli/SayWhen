@@ -36,7 +36,7 @@
                     Get instantly notified
                 </h3>
                 <p class="mt-3 text-lg text-gray-500">
-                    Don't rely on the retailer's email notifications. More often then not, you will receive stock-update emails hours after the product
+                    Don't rely on the retailer's email notifications. More often than not, you will receive stock-update emails hours after the product
                     is in stock. This is because outgoing e-mail is very sensitive to the appearance of being bulk or spam.
                 </p>
 
@@ -101,7 +101,8 @@
                                 No account required
                             </dt>
                             <dd class="mt-2 text-base text-gray-500">
-                                SayWhen does not use the aspect of user accounts. Your watchlist is associated with your email address. 
+                                SayWhen does not implement user accounts. Your watchlist is simply associated with your email address.
+                                All you need to do is verify your email in order to receive notifications
                             </dd>
                         </div>
                     </div>
