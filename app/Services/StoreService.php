@@ -101,7 +101,7 @@ class StoreService implements StoreServiceContract
      * Prases the product
      *
      * @param string $product
-     * @param string|int $productNr
+     * @param string|int|null $productNr
      * @return bool|array
      */
     public function fetchProduct(string $product, $productNr = null)
