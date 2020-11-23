@@ -67,6 +67,11 @@ class ProductController extends Controller
      */
     public function store(string $store, Request $request)
     {
+        $request->validate([
+            'product' => 'required',
+            'email' => 'required|email',
+        ]);
+
         $email = $request->get('email');
         $product = $request->get('product');
         $productNr = $request->get('product_nr');
